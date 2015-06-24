@@ -2,9 +2,11 @@ FROM tutum/lamp
 
 WORKDIR /app
 RUN apt-get update
-RUN apt-get install -y wget php5-cli php5-dev php5-gd php5-pgsql php5-sqlite php5-mysqlnd php5-curl php5-intl php5-mcrypt php5-ldap php5-gmp php5-apcu php5-imagick php5-fpm smbclient liboauth-php php-pear libpcre3-dev
-RUN pecl install -f oauth
+RUN apt-get install -y wget php5-cli php5-dev php5-gd php5-pgsql php5-sqlite php5-mysqlnd php5-curl php5-intl php5-mcrypt php5-ldap php5-gmp php5-imagick php5-fpm smbclient liboauth-php php-pear libpcre3-dev
+RUN apt-get purge -y php5-apcu
+RUN pecl install -f oauth apcu
 RUN echo "extension=oauth.so" >> /etc/php5/apache2/php.ini
+RUN echo "extension=apcu.so" >> /etc/php5/apache2/php.ini
 ADD apache_config /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 RUN a2enmod ssl
